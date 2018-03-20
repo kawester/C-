@@ -1,0 +1,124 @@
+#include <iostream>
+using namespace std;
+
+class VectorInt{
+	private: int current;
+	private: int* head;
+	private: int cap;
+	
+public: VectorInt(){//default
+	cap=1;
+	current=0;
+	head=new int[cap];}
+	
+VectorInt(int kapa, int value){//fill
+	cap=kapa;
+	current=kapa;
+	head=new int[kapa];
+	for(int i=0;i<kapa;i++){
+		head[i]=value;}}
+		
+VectorInt(const VectorInt &x){//copy
+	cap=x.cap;
+	current=x.current;
+	head=new int[cap];
+	for(int i=0;i<current;i++)
+	    head[i]=x.head[i];}
+
+//one liners:	
+int size(){return current;}
+void pop(){current--;}
+int capacity(){return cap;}
+int front(){return head[0];}
+int back(){return head[current-1];}
+int * data(){return head;}
+void clear(){current=0;}
+int max_size(){return 4000000004;}
+
+VectorInt & operator= (VectorInt & x){
+    if(this== & x)
+        return * this;
+    current=0;
+    reserve(x.size());
+    for(int i=0;i<x.size();i++)
+        head[i]=x.head[i];
+    current=x.size();
+    return *this;}
+    
+int operator[](int n){
+    return head[n];}
+
+void resize(int n, int val){
+    int * temp=head;
+    if(n<current){
+        for(int i=0;i<n;i++)
+            head[i]=temp[i];
+        for(int i=n;i<cap;i++)
+            head[i]=0;}
+    else{
+        if(n<cap){
+            for(int i=current;i<n;i++)
+                head[i]=val;}
+        else{
+            reserve(n);
+            for(int i=current;i<n;i++)
+                head[i]=val;}
+        }        
+    }
+
+void shrink_to_fit(){
+    int * temp=head;
+    head=new int[current];
+    for(int i=0;i<current;i++)
+        head[i]=temp[i];}
+
+void swamp(VectorInt& x){//git outta my swaaamp
+    int *temp=head;
+    head=x.head;
+    x.head=temp;}
+
+void insert(int position, int value, int n){
+    int * temp=head;
+    head=new int[cap+n];
+    for(int x=0;x<position;x++)
+        head[x]=temp[x];
+    for(int y=position;y<(position+n);y++)
+        head[y]=value;
+    for(int z=(position+n);z<cap;z++)
+        head[z]=temp[z+n];}
+
+bool empty(){
+    if(current==0)
+        return true;
+    else
+        return false;}
+
+int at(int n){
+    if(n>=0&&n<cap)
+        return head[n];
+    else
+        throw "index out of bounds.";}
+	
+void reserve(int n){
+	    int * temp=head;
+		head=new int[n];
+		for(int i=0;i<current;i++)
+		    head[i]=temp[i];
+		cap=n;}
+    
+void push(int num){
+	if(current<cap){
+	    int * temp=head;
+	    temp+=current;
+	    *temp=num;
+        current++;}
+	else {
+	    reserve(cap*2);
+	    push(num);}}
+};//inside^    outside v		
+			
+int main(){
+	VectorInt array;
+	for(int i=0;i<10000;i++)
+		array.push(i);
+	return 0;}
